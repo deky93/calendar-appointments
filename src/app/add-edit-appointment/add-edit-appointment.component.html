@@ -1,0 +1,80 @@
+<div class="dialog-content" tabindex="0" (keydown.enter)="onSaveClick()">
+   <div>
+    <h5 mat-dialog-title class="gray-text" *ngIf="!data.uuid">Add Appointment</h5>
+    <h5 mat-dialog-title class="gray-text" *ngIf="data.uuid">Edit Appointment</h5>
+    <div [formGroup]="appointmentForm">
+      <div mat-dialog-content>
+        <mat-form-field class="form-field">
+          <mat-label>Title</mat-label>
+          <input formControlName="title" matInput />
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <mat-label>Color</mat-label>
+          <mat-select [ngStyle]="{'background-color': selectedColor}" formControlName="color">
+            <mat-option *ngFor="let color of colors" [value]="color" (click)="selectColor(color)">
+              <span class="colors" [ngStyle]="{'background-color': color}" ></span>
+             </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <mat-label>Location</mat-label>
+          <mat-select formControlName="location">
+            @for (location of locations; track location) {
+              <mat-option [value]="location.value">{{location.viewValue}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <mat-label>Notes</mat-label>
+          <textarea matInput style="overflow: hidden;"
+          id="textarea" name="textarea" rows="4" cols="50" formControlName="notes"
+          ></textarea>
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <mat-label>Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <mat-label>Start Time</mat-label>
+          <input matInput formControlName="startTime" type="time" />
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <mat-label>End Time</mat-label>
+          <input matInput formControlName="endTime" type="time"/>
+        </mat-form-field>
+        <div
+          *ngIf="
+            appointmentForm.errors && appointmentForm.errors['timeRangeInvalid']
+          "
+          class="error"
+        >
+          End time must be after start time.
+        </div>
+      </div>
+      <div mat-dialog-actions align="end">
+        <button type="submit" mat-flat-button (click)="onSaveClick()">
+          <span *ngIf="data.uuid">Edit Appointment</span>
+          <span *ngIf="!data.uuid">Add Appointment</span>
+        </button>
+        <button
+          (click)="onDeleteClick()"
+          *ngIf="data.uuid"
+          style="margin-left: 10px"
+          mat-stroked-button
+        >
+          Delete
+        </button>
+        <button
+          style="margin-left: 10px"
+          mat-stroked-button
+          (click)="onNoClick()"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+   </div>
+  </div>
+  
