@@ -1,4 +1,4 @@
-# Angular Calendar Appointments Application
+# Angular Calendar Appointments App
 
 Calendar appointments application built using Angular, Angular Material, RXJS, Angular Forms and Angular CDK. The application allows users to manage appointments through a calendar interface.
 
