@@ -338,14 +338,32 @@ export class AppointmentsListComponent {
   }
 
   getAppointmentsForDateTime(date: Date, timeSlot: string): IAppointment[] {
-    const appointmentsForDateTime: IAppointment[] = this.appointments.filter(
-      (appointment) =>
-        this.isSameDate(appointment.date, date) &&
-        appointment.startTime <= timeSlot &&
-        appointment.endTime >= timeSlot
-    );
-    return appointmentsForDateTime;
+    const slotHour = parseInt(timeSlot.split(':')[0], 10); // e.g., "12:00" → 12
+  
+    return this.appointments.filter(appointment => {
+      if (!this.isSameDate(appointment.date, date)) return false;
+  
+      const [startHour, startMin] = appointment.startTime.split(':').map(Number);
+      const [endHour, endMin] = appointment.endTime.split(':').map(Number);
+  
+      const roundedStartHour = startMin >= 30 ? startHour + 1 : startHour;
+      const roundedEndHour = endMin >= 30 ? endHour + 1 : endHour;
+      const appointmentStart = roundedStartHour;
+      const appointmentEnd = roundedEndHour;
+  
+      return slotHour >= appointmentStart && slotHour <= appointmentEnd;
+    });
   }
+
+  // getAppointmentsForDateTime(date: Date, timeSlot: string): IAppointment[] {
+  //   const appointmentsForDateTime: IAppointment[] = this.appointments.filter(
+  //     (appointment) =>
+  //       this.isSameDate(appointment.date, date) &&
+  //       appointment.startTime <= timeSlot &&
+  //       appointment.endTime >= timeSlot
+  //   );
+  //   return appointmentsForDateTime;
+  // }
 
   previous() {
     if (this.currentView === 'month') {
